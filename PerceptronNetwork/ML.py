@@ -20,10 +20,11 @@ class NeuralNetwork(object):
         input_size = 785                            #input size
         output_size = 10                            #output size
         self.bias = 1                               #bias for the data
-        self.lr = 0.001                             #the learning rate for the training
+        self.lr = 0.1                             #the learning rate for the training
         self.accuracy = 0                           #accuracy of the network after training
         self.train_acc = []                         #list of training accuracy
         self.test_acc = []                          #list of testing accuracy
+        self.epoch_list = []
         y = []
         z = []
 
@@ -128,21 +129,15 @@ class NeuralNetwork(object):
             i += 1
 
     #function to the plot the training from the .csv files
-    def plot(self):
-        x1, y1 = np.loadtxt("train_output0.001.csv", delimiter=',', unpack=True)
-        x2, y2 = np.loadtxt("test_output0.001.csv", delimiter=',', unpack=True)
-        plt.plot(x1, y1, label="Training Set")
-        plt.plot(x2, y2, label="Testing Set")
-        plt.xlabel('Epochs')
-        plt.ylabel('Accuracy (%) ')
+    def plot_acc(self):
+        plt.figure(figsize=(15,5))
+        plt.plot(NN.epoch_list, NN.train_acc, label="Training Set")
+        plt.plot(NN.epoch_list, NN.test_acc, label="Testing Set")
+        plt.xlabel('Epoch')
+        plt.ylabel('Accuracy (%)')
         plt.title('For Learning rate ' + str(self.lr))
         plt.legend()
         plt.show()
-
-    def write_accuracy(self, accur_index, accur, input_ds):
-        with open(input_ds, 'a', newline='') as myfile:
-            wr = csv.writer(myfile)
-            wr.writerow([accur_index, accur])
 
     def saveWeights(self):
         np.savetxt("w1.txt", self.W1, fmt="%s")
@@ -159,7 +154,6 @@ for i in range(50):    #train the NN 50 times
     test_accuracy = NN.accuracy
     print("The testing accuracy of the given Epoch is: " + str(test_accuracy))
     NN.test_acc.append(test_accuracy)
-    NN.write_accuracy(i, train_accuracy, 'train_output' + str(NN.lr) + '.csv')
-    NN.write_accuracy(i, test_accuracy, 'test_output' + str(NN.lr) + '.csv')
+    NN.epoch_list.append(i)
 
-NN.plot()
+NN.plot_acc()
