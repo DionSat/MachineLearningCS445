@@ -1,7 +1,7 @@
 """
 Author: Dion Satcher
-Date: 2/11/20
-Assignment 2
+Date: 2/23/20
+Assignment 3
 CS445
 Student ID: 911832609
 """
